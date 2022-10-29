@@ -23,7 +23,7 @@ services:
     env_file: .env
     environment:
       - WORDPRESS_DB_HOST=db:3306
-      - WORDPRESS_DB_USER=wp_admin
+      - WORDPRESS_DB_USER=root
       - WORDPRESS_DB_PASSWORD=Aa123456
       - WORDPRESS_DB_NAME=wordpress
     volumes:
