@@ -6,3 +6,7 @@ services:
       - "8000:80"
     volumes:
       - ./app:/usr/share/nginx/html
+    links: 
+      - php
+  php: 
+    image: php:7-fpm
