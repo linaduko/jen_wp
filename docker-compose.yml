@@ -10,7 +10,26 @@ services:
       MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
       MYSQL_DATABASE=$MYSQL_DATABASE
     volumes:
-      -dbdata:/var/lib/mysql
+      - dbdata:/var/lib/mysql
+    network:
+      - app-network
+  wordpress:
+    depends_on:
+      - db
+    image: wordpress:5.1.1-fpm-alpine
+    container_name: wordpress
+    restart: uless-stopped
+    env_file: .env
+    enviroment:
+      - WORDPRESS_DB_HOST=db:3306
+      - WORDPRESS_DB_USER=$MYSQL_USER
+      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
+      - WORDPRESS_DB_NAME=$MYSQL_DATABASE
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - app-network
+################################ 
   web:
     image: nginx:alpine
     container_name: web
@@ -18,10 +37,21 @@ services:
       - "8000:80"
     restart: unless-stopped
     volumes:
-      - ./app:/usr/share/nginx/html
+      - wordpress:/var/www/html
+      -./nginx:/etc/nginx/conf.d
+#      - ./app:/usr/share/nginx/html
     links: 
       - php
+    networks:
+      -app-network
   php: 
     image: php:7-fpm
   
+volumes: 
+   wordpess:
+   dbdata:
+
+networks:
+  app-network:
+    driver: bridge
 
