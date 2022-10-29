@@ -1,12 +1,27 @@
 version: '3.7'
 services:
+  db:
+    image: mysql:8.0
+    container_name: db
+    command: '--default-authentication-plugin=mysql_native_password'
+    restart: always
+    env_file: .env
+    enviroment:
+      MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+      MYSQL_DATABASE=$MYSQL_DATABASE
+    volumes:
+      -dbdata:/var/lib/mysql
   web:
     image: nginx:alpine
+    container_name: web
     ports:
       - "8000:80"
+    restart: unless-stopped
     volumes:
       - ./app:/usr/share/nginx/html
     links: 
       - php
   php: 
     image: php:7-fpm
+  
+
