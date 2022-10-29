@@ -7,8 +7,8 @@ services:
     restart: always
     env_file: .env
     enviroment:
-      MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-      MYSQL_DATABASE=$MYSQL_DATABASE
+      MYSQL_ROOT_PASSWORD=Aa123456
+      MYSQL_DATABASE=wordpress
     volumes:
       - dbdata:/var/lib/mysql
     network:
@@ -22,14 +22,13 @@ services:
     env_file: .env
     enviroment:
       - WORDPRESS_DB_HOST=db:3306
-      - WORDPRESS_DB_USER=$MYSQL_USER
-      - WORDPRESS_DB_PASSWORD=$MYSQL_PASSWORD
-      - WORDPRESS_DB_NAME=$MYSQL_DATABASE
+      - WORDPRESS_DB_USER=wp_admin
+      - WORDPRESS_DB_PASSWORD=Aa123456
+      - WORDPRESS_DB_NAME=wordpress
     volumes:
       - wordpress:/var/www/html
     networks:
       - app-network
-################################ 
   web:
     image: nginx:alpine
     container_name: web
@@ -48,7 +47,7 @@ services:
     image: php:7-fpm
   
 volumes: 
-   wordpess:
+   wordpress:
    dbdata:
 
 networks:
