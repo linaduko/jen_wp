@@ -1,24 +1,25 @@
-version: '3.7'
+version: '3'
 services:
   db:
     image: mysql:8.0
     container_name: db
-    command: '--default-authentication-plugin=mysql_native_password'
-    restart: always
+    restart: unless-stopped
     env_file: .env
     enviroment:
       MYSQL_ROOT_PASSWORD=Aa123456
       MYSQL_DATABASE=wordpress
     volumes:
       - dbdata:/var/lib/mysql
+    command: '--default-authentication-plugin=mysql_native_password'
     network:
       - app-network
+  
   wordpress:
     depends_on:
       - db
     image: wordpress:5.1.1-fpm-alpine
     container_name: wordpress
-    restart: uless-stopped
+    restart: unless-stopped
     env_file: .env
     enviroment:
       - WORDPRESS_DB_HOST=db:3306
@@ -29,11 +30,12 @@ services:
       - wordpress:/var/www/html
     networks:
       - app-network
+
   web:
     depends_on:
       - wordpress
     image: nginx:alpine
-    container_name: web
+    container_name: webserver
     ports:
       - "8000:80"
     restart: unless-stopped
@@ -41,12 +43,12 @@ services:
       - wordpress:/var/www/html
       - ./nginx:/etc/nginx/conf.d
 #      - ./app:/usr/share/nginx/html
-    links: 
-      - php
+#    links: 
+#      - php
     networks:
       - app-network
-  php: 
-    image: php:7-fpm
+        #  php: 
+        #    image: php:7-fpm
   
 volumes: 
    wordpress:
