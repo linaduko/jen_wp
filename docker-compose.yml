@@ -43,12 +43,8 @@ services:
       - wordpress:/var/www/html
       - ./nginx:/etc/nginx/conf.d
 #      - ./app:/usr/share/nginx/html
-#    links: 
-#      - php
     networks:
       - app-network
-        #  php: 
-        #    image: php:7-fpm
   
 volumes: 
    wordpress:
